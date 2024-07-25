@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import './style.css'
 import { useDispatch, useSelector } from 'react-redux'
-import { Delete_Emp, handlemultipleDelte, View_Emp } from '../Redux/Action/Empaction';
+import { Delete_Emp, handlemultipleDelte, handleStatus, View_Emp } from '../Redux/Action/Empaction';
 import { useNavigate } from 'react-router-dom';
 
 const View = () => {
@@ -10,21 +10,21 @@ const View = () => {
   const navigate = useNavigate();
   const data = useSelector(state => state.EmployeData.EmployeData)
   // console.log(data);
-  const [mdel, setMdel] = useState([])
+  const [selectedEmps, setSelectedEmps] = useState([])
 
   useEffect(() => {
     dispatch(View_Emp())
   }, [])
 
   const multipleDelte = (id, check) => {
-    let all = [...mdel];
+    let all = [...selectedEmps];
     if (check) {
       all.push(id)
     }
     else {
       all = all.filter((item) => item != id);
     }
-    setMdel(all)
+    setSelectedEmps(all)
   }
   return (
     <div>
@@ -36,12 +36,14 @@ const View = () => {
             <th>Name</th>
             <th>Email</th>
             <th>City</th>
+            <th>Password</th>
             <th>Salary</th>
             <th>Desigation</th>
             <th>Action</th>
             <th>
-              <button className='btn py-0 fw-bold' onClick={() => dispatch(handlemultipleDelte(mdel))}>Delete</button>
+              <button className='btn py-0 fw-bold' onClick={() => dispatch(handlemultipleDelte(selectedEmps))}>Delete</button>
             </th>
+            <th>Status</th>
           </tr>
         </thead>
         <tbody>
@@ -53,6 +55,7 @@ const View = () => {
                   <td>{emp.name}</td>
                   <td>{emp.email}</td>
                   <td>{emp.city}</td>
+                  <td>{emp.password}</td>
                   <td>{emp.salary}</td>
                   <td>{emp.des}</td>
                   <td>
@@ -60,7 +63,16 @@ const View = () => {
                     <button className='btn btn-primary ms-3' onClick={() => navigate('/edit', { state: emp })}>Edit</button>
                   </td>
                   <td>
-                    <input type="checkbox" onChange={(e) => multipleDelte(emp.id, e.target.checked)} />
+                    <input type="checkbox" checked={selectedEmps.includes(emp.id)} onChange={(e) => multipleDelte(emp.id, e.target.checked)} />
+                  </td>
+                  <td>
+                    {
+                      emp.status == 'active' ? (
+                        <button className='btn btn-success' onClick={() => dispatch(handleStatus(emp.id, emp.status))}>{emp.status}</button>
+                      ) : (
+                        <button className='btn btn-danger' onClick={() => dispatch(handleStatus(emp.id, emp.status))}>{emp.status}</button>
+                      )
+                    }
                   </td>
                 </tr>
               )

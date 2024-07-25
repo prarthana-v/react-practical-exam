@@ -77,8 +77,8 @@ export const Edit_Emp = (obj) => {
       await updateDoc(data, {
         name: obj.name,
         email: obj.email,
-        phone: obj.phone,
         salary: obj.salary,
+        city: obj.city,
         des: obj.des,
         password: obj.password,
       });
@@ -88,17 +88,52 @@ export const Edit_Emp = (obj) => {
   };
 };
 
-export const handlemultipleDelte = (mdel) => {
+export const handlemultipleDelte = (ids) => {
+  // console.log(ids);
   return async (dispatch) => {
     try {
-      let batch = writeBatch();
-      let data = await getDocs(collection(db, "Employees"));
-
-      data.docs.map((document) => ({}));
-
-      console.log(data);
+      ids.forEach((id) => {
+        let data = doc(db, "Employees", id);
+        deleteDoc(data);
+      });
+      dispatch({
+        type: "Multiple-delete",
+        payload: ids,
+      });
     } catch (err) {
       console.log(err);
     }
+  };
+};
+
+export const handleStatus = (id, newstatus) => {
+  // console.log(id, newstatus);
+  return async (dispatch) => {
+    try {
+      if (newstatus === "active") {
+        let data = doc(db, "Employees", id);
+        await updateDoc(data, {
+          status: "deactive",
+        });
+        dispatch(UpdateStatus(id, "deactive"));
+      } else {
+        let data = doc(db, "Employees", id);
+        await updateDoc(data, {
+          status: "active",
+        });
+        dispatch(UpdateStatus(id, "active"));
+      }
+
+      // console.log(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+};
+
+export const UpdateStatus = (id, status) => {
+  return {
+    type: "Update-status",
+    payload: { id, status },
   };
 };

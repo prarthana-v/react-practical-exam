@@ -6,24 +6,26 @@ import { Edit_Emp } from '../Redux/Action/Empaction';
 
 const Edit = () => {
 
-  const [name, setName] = useState();
-  const [email, setEmail] = useState();
-  const [password, setPassword] = useState();
-  const [city, setCity] = useState();
-  const [salary, setSalary] = useState();
-  const [des, setDes] = useState();
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [city, setCity] = useState("");
+  const [salary, setSalary] = useState("");
+  const [des, setDes] = useState("");
   const dispatch = useDispatch();
   const location = useLocation();
   const navigate = useNavigate();
-  // console.log(location);
 
   useEffect(() => {
-    setName(location?.state?.name)
-    setEmail(location?.state?.email);
-    setPassword(location?.state?.password)
-    setCity(location?.state?.city)
-    setDes(location?.state?.des)
-    setSalary(location?.state?.salary)
+    console.log(location.state);
+    if (location.state) {
+      setName(location?.state?.name)
+      setEmail(location?.state?.email);
+      setPassword(location?.state?.password)
+      setCity(location?.state?.city)
+      setDes(location?.state?.des)
+      setSalary(location?.state?.salary)
+    }
   }, [location.state])
 
 
@@ -33,7 +35,7 @@ const Edit = () => {
     console.log(name, email, password, city, salary, des);
     let obj = {
       id: location?.state.id,
-      name, email, password, city, salary, des
+      name, email, password, city, salary, des,
     }
 
     dispatch(Edit_Emp(obj));

@@ -5,19 +5,22 @@ import { Add_Emp } from '../Redux/Action/Empaction';
 
 const Add = () => {
 
-  const [name, setName] = useState();
-  const [email, setEmail] = useState();
-  const [password, setPassword] = useState();
-  const [city, setCity] = useState();
-  const [salary, setSalary] = useState();
-  const [des, setDes] = useState();
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [city, setCity] = useState("");
+  const [salary, setSalary] = useState("");
+  const [des, setDes] = useState("");
+  const [status, setStatus] = useState("");
+
   const dispatch = useDispatch();
 
   const handleSubmit = (e) => {
     e.preventDefault();
     // console.log(name, eail, password, city, salary, des);
     let obj = {
-      name, email, password, city, salary, des
+      name, email, password, city, salary, des,
+      status: 'active'
     }
 
     dispatch(Add_Emp(obj));
